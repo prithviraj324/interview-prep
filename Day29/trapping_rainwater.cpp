@@ -25,3 +25,37 @@ public:
         return amt;
     }
 };
+
+//Time Complexity: O(n)
+//Space Complexity: O(1)
+//Since water trapped at 'i' is decided by min of max height on left and right of 'i', we can use 2 pointers to keep track of maxL and maxR while traversing the array from both ends.
+//Depending on which of maxL or maxR is smaller, we can move that pointer inward and calculate water trapped at that index, since we're sure of maxL or maxR being the limiting factor.
+//Assume maxL <= maxR, then water trapped at index 'l' is decided by maxL only, as there definitely exists a bar on right which is >= maxL (i.e. maxR).
+//Hence water trapped at 'l' = maxL - h[l], if this is +ve, add it to amt.
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int amt = 0;
+        int maxL = height[0], maxR = height.back();
+        int l = 0, r = height.size()-1;
+        while(l<r) {
+            if(maxL <= maxR) {
+                l++;
+                if(maxL - height[l] < 0) { 
+                    maxL = max(maxL, height[l]);
+                    continue;
+                }
+                amt += maxL - height[l];
+            } else {
+                r--;
+                if(maxR - height[r] < 0) {
+                    maxR = max(maxR, height[r]);
+                    continue;
+                }
+                amt += maxR - height[r];
+            }
+        }
+
+        return amt;
+    }
+};
