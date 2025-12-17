@@ -50,3 +50,24 @@ public:
     }
 };
 //a better solution exists with TC:O(n) and SC:O(1), but is pretty tricky
+//2025 me thinks it isnt that tricky anymore, its just DP and thinking about the problem bottom-up
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& temp) {
+        vector<int> res(temp.size(), 0);
+
+        // Fill the result vector backwards
+        //res[j] = number of days to wait from day j to get a hotter day
+        for(int i = temp.size()-1; i>=0; i--) {
+            int j = i+1; // j = some day in the future, start with tomorrow first
+            while(j<temp.size() && temp[j] <= temp[i]) {    //while j in bounds and tomorrow(i.e. res[j]) isnt hotter
+                if(res[j] > 0) j += res[j]; // if theres a hotter day than tomorrow(i.e. res[j]), go there
+                else j = temp.size();   // else go out of bounds to end loop
+            }
+            //We're outside loop, so j'th day is either out of bounds or this is the next hottest day
+            if(j < temp.size()) res[i] = j-i;   //if not out-of-bounds, j'th day is (j-i) days from i'th day and is the first hotter day since i'th day
+            //if out-of-bounds, result vec is initialized with all 0's, so its valid
+        }
+        return res;
+    }
+};
