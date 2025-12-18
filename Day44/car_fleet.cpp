@@ -38,3 +38,38 @@ public:
         return st.size();
     }
 };
+
+//ROUND 2
+//slightly better aproach and more understandable
+class Solution2 {
+public:
+    int carFleet(int target, vector<int>& position, vector<int>& speed) {
+        stack<double> st;
+        map<int, int> sorter;
+        vector<int> newpos(speed.size(), 0), newspeed(speed.size(), 0);
+
+        for(int i = 0;i<speed.size(); i++) 
+            sorter[position[i]] = i;
+
+        int idx = 0;
+        for(auto p: sorter) {
+            newpos[idx] = p.first;
+            newspeed[idx] = speed[p.second];
+            idx++;
+        }
+        //newpos and newspeed are sorted based on starting position
+
+        for(int i = 0; i<speed.size(); i++) {
+            double i_car_eta = (double)(target-newpos[i])/newspeed[i]; //time taken by i'th car to reach target
+            while(!st.empty() && i_car_eta >= st.top()) { //if current car takes longer than previous fleet
+                st.pop(); //pop all cars that can leave prev fleet and make a fleet with i'th car
+            }
+            //exited loop, so either stack empty or prev fleet takes longer than current fleet or car
+            //dont care what all cars are part of current fleet that takes i_car_eta time, just care about their eta
+            //stack stores eta's of each fleet monotonically decreasing
+            st.push(i_car_eta); //push current car's eta,
+        }
+
+        return st.size();
+    }
+};
