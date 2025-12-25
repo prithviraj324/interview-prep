@@ -1,0 +1,4 @@
+--Very good DS to store items in order
+
+PATTERNS-----------------------------------------
+-Monotonic Stack
