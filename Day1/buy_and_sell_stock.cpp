@@ -19,3 +19,39 @@ public:
         return maxprofit;
     }
 };
+
+//Direct dp soln (just remember minprice so far and calculate maxprofit at each step)
+//This is Kadane's algorithm apparently
+class Solution2 {
+public:
+    int maxProfit(vector<int>& prices) {
+        int lowest_prev_price = prices[0], res = 0;
+        for(int i=0; i<prices.size(); i++) {
+            res = max(res, prices[i]-lowest_prev_price);
+            lowest_prev_price = min(lowest_prev_price, prices[i]);
+        }
+        return res;
+    }
+};
+
+//Some cringe sliding window soln:
+//Let i hunt for local minima, j hunt for local maxima once i is found, calculate profit and update res
+//glorified linear scan
+class Solutione {
+public:
+    int maxProfit(vector<int>& prices) {
+        int res = 0;
+
+        int i=0, j=1;
+        while(i<prices.size() && j<prices.size()) {
+            if(prices[j] < prices[i]) {
+                i=j;
+                j++;
+                continue;
+            }
+            res = max(res, prices[j] - prices[i]);
+            j++;
+        }
+        return res;
+    }
+};
