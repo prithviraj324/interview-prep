@@ -88,3 +88,26 @@ public:
         return maxlen;
     }
 };
+
+//Old me trying too hard, simple to understand solution:
+class Solution2 {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int res = 1;
+        if(s.size() == 0) return 0;
+        unordered_map<char, int> cmap;  //store chars along with index they're present at, so we can skip to it
+        int l=0,r=1;
+        cmap[s[l]] = 0;
+        while(l<s.size() && r<s.size()) {
+            if(cmap.find(s[r]) == cmap.end()) {
+                cmap[s[r]] = r;
+                res = max(res, r-l+1);
+                r++;
+            } else if(cmap[s[r]] < l) { //if occurence is outside window, ignore it and remove from map
+                cmap.erase(s[r]);
+            } else l = cmap[s[r]] + 1;  //move L to index after first occurence of s[r]
+        }
+
+        return res;
+    }
+};
