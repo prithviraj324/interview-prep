@@ -54,3 +54,26 @@ public:
         return ans;
     }
 };
+//Round2 soln using array of 26elements, much more understandable
+class Solution3 {
+public:
+    int characterReplacement(string s, int k) {
+        int n = s.size(), res = 0;
+        vector<int> cmap(26, 0);
+
+        int l=0, maxf = 0; 
+        for(int r=0; r<n; r++) {
+            cmap[s[r] - 'A']++; //increase freq of char in window's charmap
+            maxf = max(maxf, cmap[s[r]-'A']);   //update maxfreq, we dont care which char was most frequent,
+                                                //just that some char is most frequent with freq = maxf
+
+            while((r-l+1) - maxf > k) { //if chars to replace exceed k, shrink window from left
+                cmap[s[l]-'A']--;   //decrement freq of char going out of window
+                l++;
+            }
+            res = max(res, r-l+1);  //on every valid window, update result
+        }
+
+        return res;
+    }
+};
